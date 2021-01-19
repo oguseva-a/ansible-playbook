@@ -1,0 +1,8 @@
+- hosts: web
+  tasks:
+  - name: "Register uname"
+    shell: uname -r
+    register: kernel_version
+  - name: "Print Kernel Version"
+    debug:
+      msg: "{{ kernel_version.stdout }}"

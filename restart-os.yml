@@ -1,0 +1,16 @@
+- hosts: all
+  tasks:
+  - name: Restart all services
+    shell: echo "Restarting all services"
+    notify: "Restart {{ ansible_facts.os_family }} ntpd"
+  handlers:
+  - name: Restart RedHat ntpd
+    service:
+      name: ntpd
+      state: restarted
+      enabled: yes
+  - name: Restart Debian ntpd
+    service:
+      name: ntp
+      state: restarted
+      enabled: yes

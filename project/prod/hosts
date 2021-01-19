@@ -1,0 +1,8 @@
+[web]
+web ansible_host=104.131.99.152
+
+[db]
+db ansible_host=104.131.117.42
+
+[ubuntu-trial]
+unbunti-trial ansible_host=104.131.164.116
