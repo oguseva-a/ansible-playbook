@@ -1,0 +1,33 @@
+- hosts: all
+  vars:
+    php_version: "7.3"
+    mysql_db: "wordpress"
+    mysql_user: "wpuser"
+    mysql_password: "password"
+  tasks:
+  - name: Install Prerequisites
+    package:
+      name:
+      - libselinux-python
+      - epel-release
+      state: present
+  - name: Disable Selinux
+    selinux:
+      state: disabled
+    register: selinux_status
+  - name: Reboot
+    reboot:
+      reboot_timeout: 3600
+    when: selinux_status.changed
+  - name: Install php
+    include_tasks: install_php.yml
+    when: inventory_hostname == "web1"
+  - name: Install apache
+    include_tasks: install_apache.yml
+    when: inventory_hostname == "web1"
+  - name: Install mysql
+    include_tasks: install_mysql.yml
+    when: inventory_hostname == "db1"
+  - name: Install WordPress
+    include_tasks: install_wordpress.yml
+    when: inventory_hostname == "web1"
