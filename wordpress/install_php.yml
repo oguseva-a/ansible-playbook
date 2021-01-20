@@ -1,0 +1,16 @@
+- name: Install Remi
+  yum:
+    name: "https://rpms.remirepo.net/enterprise/remi-release-7.rpm"
+
+- name: Enable PHP 73
+  shell: yum-config-manager --enable remi-php73
+  when: php_version == "7.3"
+- name: Disable PHP 73
+  shell: yum-config-manager --disable remi-php73
+  when: php_version != "7.3"
+
+- yum:
+    name:
+    - php
+    - php-mysql
+    state: latest
