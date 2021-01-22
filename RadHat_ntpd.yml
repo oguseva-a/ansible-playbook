@@ -1,0 +1,27 @@
+- hosts: all
+  tasks: 
+  - name: Install ntpd
+    yum: 
+      name: ntp
+      update_cache: yes
+  
+  - name: Reconfigure time servers 
+    lineinfile:
+      path: /etc/ntp.conf
+      regexp: '^server.*iburst$'
+      line: 'server pool.ntp.org iburst'
+    notify: RadHat restart ntpd
+
+  - name: Delete unused time servers
+    lineinfile:
+      path: /etc/ntp.conf
+      regexp: '^server.*iburst$'
+      state: absent
+      backup: yes
+    notify: RedHat restart ntpd
+  
+  handlers: 
+  - name: RadHat restart ntpd
+    service:
+      name: ntpd
+      state: restarted

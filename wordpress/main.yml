@@ -31,3 +31,4 @@
   - name: Install WordPress
     include_tasks: install_wordpress.yml
     when: inventory_hostname == "web1"
+

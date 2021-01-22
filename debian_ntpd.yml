@@ -1,0 +1,28 @@
+- hosts: ubuntu
+  tasks: 
+  - name: Install ntpd
+    apt: 
+      name: ntp
+      update_cache: yes
+  
+  - name: Reconfigure time servers 
+    lineinfile:
+      path: /etc/ntp.conf
+      regexp: '^pool.*iburst$'
+      line: 'pool ubuntu.pool.ntp.org iburst'
+    notify: Ubuntu restart ntpd
+
+  - name: Delete unused time servers
+    lineinfile:
+      path: /etc/ntp.conf
+      regexp: '^pool.*iburst$'
+      state: absent
+      backup: yes
+    notify: Ubuntu restart ntpd
+
+  handlers:
+  - name: Ubuntu restart ntpd
+    service:
+      name: ntp
+      state: restarted
+ 
